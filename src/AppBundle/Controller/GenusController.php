@@ -49,7 +49,7 @@ class GenusController extends Controller
      */
     public function listAction(){
         $em = $this->getDoctrine()->getManager();
-        $genuses = $em->getRepository('AppBundle:Genus')->findAllPublishedOrderedBysize();
+        $genuses = $em->getRepository('AppBundle:Genus')->findAllPublishedOrderedByRecentlyActive();
         return $this->render('genus/list.html.twig', ['genuses' => $genuses]);
     }
     /**
@@ -73,8 +73,10 @@ class GenusController extends Controller
 //            $cache->save($key, $funFact);
 //        }
 
+        $recentNotes = $em->getRepository('AppBundle:GenusNote')->findAllRecentNotesForGenus($genus);
         return $this->render('genus/show.html.twig', [
-                'genus' =>$genus
+                'genus' =>$genus,
+                'recentNoteCount' => count($recentNotes)
             ]);
     }
 
